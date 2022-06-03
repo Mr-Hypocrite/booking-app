@@ -1,13 +1,43 @@
-import express from "express"
+import express from "express";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
+import authRoute from "./routes/auth.js"
+import usersRoute from "./routes/users.js"
+import hotelsRoute from "./routes/hotels.js"
+import roomsRoute from "./routes/rooms.js"
+const app = express();
+dotenv.config();
+
+const connect = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO);
+    console.log("Connect to mongoDB");
+  } catch (error) {
+    throw error;
+  }
+};
+
+mongoose.connection.on("disconnected", () => {
+  console.log("mongoDb disconnected");
+});
+mongoose.connection.on("connected", () => {
+  console.log("mongoDb connected");
+});
+
+// middleware
+app.use(express.json())
 
 
-const app=express();
+app.use("/api/auth", authRoute);
+app.use("/api/users", usersRoute);
+app.use("/api/hotels", hotelsRoute);
+app.use("/api/rooms", roomsRoute);
 
-app.get("/",(req,res)=>{
-  res.send("connected to express");
-  res.end();
-})
+app.get("/", (req, res) => {
+  res.send("Hello");
+});
 
-app.listen(5000,(req,res)=>{
-  console.log("listing on port 5000")
-})
+app.listen(3000, () => {
+  connect();
+  console.log("Connected Backend to port: 3000!");
+});

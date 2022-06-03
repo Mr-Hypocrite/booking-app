@@ -28,7 +28,31 @@ router.put("/:id", async (req, res) => {
   }
 });
 // DELETE
+router.delete("/:id", async (req, res) => {
+  try {
+    await Hotel.findByIdAndDelete(req.params.id);
+    res.status(200).json("Hotel has been deleted!");
+  } catch (e) {
+    res.status(500).json(e);
+  }
+});
 // GET
+router.get("/:id", async (req, res) => {
+  try {
+    const hotel = await Hotel.findById(req.params.id);
+    res.status(200).json(hotel);
+  } catch (e) {
+    res.status(500).json(e);
+  }
+});
 // GET ALL
+router.get("/", async (req, res) => {
+  try {
+    const hotels = await Hotel.find();
+    res.status(200).json(hotels);
+  } catch (e) {
+    res.status(500).json(e);
+  }
+});
 
 export default router;

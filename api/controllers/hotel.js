@@ -6,7 +6,7 @@ import Hotel from "../models/hotel.js";
 export const getAll = async (req, res, next) => {
   try {
     const allHotel = await Hotel.find();
-    res.send(allHotel);
+    res.status(200).json(allHotel);
   } catch (err) {
     next(err);
   }
@@ -17,7 +17,7 @@ export const getAll = async (req, res, next) => {
 export const getById = async (req, res, next) => {
   try {
     const hotel = await Hotel.findById(req.params.id);
-    res.send(hotel);
+    res.status(200).json(hotel);
   } catch (err) {
     next(err)
   }
@@ -48,8 +48,17 @@ export const updateHotel = async (req, res, next) => {
 
     res.status(200).json(savedHotel)
   } catch (err) {
-    next(err)
+    next(err);
   }
 }
 
+
+export const deleteHotel = async (req, res, next) => {
+  try {
+    const deleteHotel = await Hotel.findByIdAndDelete(req.params.id)
+    res.status(200).json(deleteHotel)
+  } catch (err) {
+    next(err);
+  }
+}
 
